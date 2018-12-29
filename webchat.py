@@ -13,7 +13,10 @@ msg_dict = {}
 
 # 文件存储临时目录
 rev_tmp_dir = "/Users/daiwen/Documents/wechat/"
+rev_recall_dst = rev_tmp_dir+"recall/"
+
 if not os.path.exists(rev_tmp_dir): os.mkdir(rev_tmp_dir)
+if not os.path.exists(rev_recall_dst): os.mkdir(rev_recall_dst)
 
 # 表情有一个问题 | 接受信息和接受note的msg_id不一致 巧合解决方案
 face_bug = None
@@ -167,10 +170,14 @@ def send_msg_helper(msg):
                     or old_msg["msg_type"] == "Attachment":
                 file = '@fil@%s' % (rev_tmp_dir + old_msg['msg_content'])
                 itchat.send(msg=file, toUserName='filehelper')
-                os.remove(rev_tmp_dir + old_msg['msg_content'])
+                # os.remove(rev_tmp_dir + old_msg['msg_content'])
+                saveRecallFile(old_msg['msg_content'])
             # 删除字典旧消息
             msg_dict.pop(old_msg_id)
 
+
+def saveRecallFile(fileName):
+    os.rename(rev_tmp_dir+fileName,rev_recall_dst+fileName)
 
 if __name__ == '__main__':
     itchat.auto_login(hotReload=True)
