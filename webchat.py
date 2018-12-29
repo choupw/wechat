@@ -152,7 +152,7 @@ def group_text_reply(msg):
 
     print("msg_time:" +msg_time_rec+  " msg_from:" + msg_from + "msg_type:" + msg["Type"] + " msg_content:" + msg_content)
     # 保存记录
-    log_msg_content = msg_time_rec + " " + msg_from + ": " + msg_content
+    log_msg_content = msg_time_rec + " " + msg_from_user + ": " + msg_content
     write_chat_msg(rev_msg_log + msg_from_group + "-group-chat.txt", log_msg_content)
 
 
