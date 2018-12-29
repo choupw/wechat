@@ -1,4 +1,4 @@
-# -*-encoding:utf-8-*-
+﻿# -*-encoding:utf-8-*-
 import os
 import re
 import shutil
@@ -12,7 +12,7 @@ from itchat.content import *
 msg_dict = {}
 
 # 文件存储临时目录
-rev_tmp_dir = "/Users/daiwen/Documents/wechat/"
+rev_tmp_dir = "d:/wechat/"
 rev_recall_dst = rev_tmp_dir+"recall/"
 
 if not os.path.exists(rev_tmp_dir): os.mkdir(rev_tmp_dir)
