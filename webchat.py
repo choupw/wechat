@@ -232,7 +232,7 @@ def callback(self):
 if not os.path.exists(rev_tmp_dir): os.mkdir(rev_tmp_dir)
 
 if __name__ == '__main__':
-    itchat.auto_login(hotReload=True,loginCallback=callback)
+    itchat.auto_login(hotReload=True,loginCallback=callback,statusStorageDir='user1.pkl')
     # itchat.auto_login(hotReload=True,enableCmdQR=2)
     itchat.run()
 
