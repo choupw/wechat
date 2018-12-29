@@ -88,7 +88,7 @@ def handler_receive_msg(msg):
 
     print("msg_time:" +msg_time_rec + "msg_from:" + msg_from + "msg_type:" + msg["Type"] + " msg_content:" + msg_content)
     # 保存记录
-    log_msg_user = login_user
+    log_msg_user = msg_from
     if msg_from == login_user:
         log_msg_user = msg_to
     log_msg_content = msg_time_rec+" " + msg_from + ": "+msg_content
