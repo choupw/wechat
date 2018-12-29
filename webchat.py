@@ -12,11 +12,16 @@ from itchat.content import *
 msg_dict = {}
 
 # 文件存储临时目录
-rev_tmp_dir = "/Users/daiwen/Documents/wechat/"
-rev_recall_dst = rev_tmp_dir+"recall/"
+rev_root_dit = "/Users/daiwen/Documents/wechat/"
+rev_tmp_dir = rev_root_dit + "tmpfile/"
+rev_recall_dst = rev_root_dit + "recall/"
+rev_msg_log = rev_root_dit + "msg/"
+login_user = "1"
 
+if not os.path.exists(rev_root_dit): os.mkdir(rev_root_dit)
 if not os.path.exists(rev_tmp_dir): os.mkdir(rev_tmp_dir)
 if not os.path.exists(rev_recall_dst): os.mkdir(rev_recall_dst)
+if not os.path.exists(rev_msg_log): os.mkdir(rev_msg_log)
 
 # 表情有一个问题 | 接受信息和接受note的msg_id不一致 巧合解决方案
 face_bug = None
@@ -39,6 +44,8 @@ def handler_receive_msg(msg):
     msg_time = msg['CreateTime']
     # 消息发送人昵称 | 这里也可以使用RemarkName备注　但是自己或者没有备注的人为None
     msg_from = (itchat.search_friends(userName=msg['FromUserName']))["NickName"]
+    # 消息接受人昵称
+    msg_to = (itchat.search_friends(userName=msg['ToUserName']))["NickName"]
     # 消息内容
     msg_content = None
     # 分享的链接
@@ -77,7 +84,15 @@ def handler_receive_msg(msg):
         }
     )
     # print("msg_time:"+msg_time +"msg_from:"+ msg_from+ "msg_type:"+ msg["Type"]+ " msg_content:"+ msg_content)
-    print("msg_time:"  + "msg_from:" + msg_from + "msg_type:" + msg["Type"] + " msg_content:" + msg_content)
+
+
+    print("msg_time:" +msg_time_rec + "msg_from:" + msg_from + "msg_type:" + msg["Type"] + " msg_content:" + msg_content)
+    # 保存记录
+    log_msg_user = login_user
+    if msg_from == login_user:
+        log_msg_user = msg_to
+    log_msg_content = msg_time_rec+" " + msg_from + ": "+msg_content
+    write_chat_msg(rev_msg_log + log_msg_user + "-user-chat.txt", log_msg_content)
 
 # 现在微信加了好多群，并不想对所有的群都进行设置微信机器人，只针对想要设置的群进行微信机器人，可进行如下设置
 # 处理群消息
@@ -134,7 +149,13 @@ def group_text_reply(msg):
             }
         }
     )
-    print("msg_time:" +  "msg_from:" + msg_from + "msg_type:" + msg["Type"] + " msg_content:" + msg_content)
+
+    print("msg_time:" +msg_time_rec+  " msg_from:" + msg_from + "msg_type:" + msg["Type"] + " msg_content:" + msg_content)
+    # 保存记录
+    log_msg_content = msg_time_rec + " " + msg_from + ": " + msg_content
+    write_chat_msg(rev_msg_log + msg_from_group + "-group-chat.txt", log_msg_content)
+
+
 # 作者：DT0203
 # 链接：https://www.jianshu.com/p/5d4de51f5375
 # 來源：简书
@@ -179,8 +200,39 @@ def send_msg_helper(msg):
 def saveRecallFile(fileName):
     os.rename(rev_tmp_dir+fileName,rev_recall_dst+fileName)
 
+def write_chat_msg(filename,text_msg):
+    # 写数据
+    file_object = open(filename, 'a+')
+    file_object.writelines("\n"+text_msg)
+    file_object.close()
+
+
+def callback(self):
+    print("--login start---")
+    print(self.storageClass.userName)
+    print(self.storageClass.nickName)
+    global login_user
+    login_user= self.storageClass.nickName
+
+    global rev_tmp_dir
+    rev_tmp_dir = rev_tmp_dir + login_user + "/"
+    if not os.path.exists(rev_tmp_dir): os.mkdir(rev_tmp_dir)
+
+    global rev_recall_dst
+    rev_recall_dst = rev_recall_dst + login_user + "/"
+    if not os.path.exists(rev_recall_dst): os.mkdir(rev_recall_dst)
+
+    global rev_msg_log
+    rev_msg_log = rev_msg_log + login_user + "/"
+    if not os.path.exists(rev_msg_log): os.mkdir(rev_msg_log)
+
+    write_chat_msg(rev_msg_log + login_user+"-login.txt","---login----")
+
+    print("---login end ---")
+if not os.path.exists(rev_tmp_dir): os.mkdir(rev_tmp_dir)
+
 if __name__ == '__main__':
-    itchat.auto_login(hotReload=True)
+    itchat.auto_login(hotReload=True,loginCallback=callback)
     # itchat.auto_login(hotReload=True,enableCmdQR=2)
     itchat.run()
 
