@@ -179,8 +179,8 @@ def send_msg_helper(msg):
             msg_body = "告诉你一个秘密~" + "\n" \
                        + old_msg.get('msg_from') + " 撤回了 " + old_msg.get("msg_type") + " 消息" + "\n" \
                        + old_msg.get('msg_time_rec') + "\n" \
-                       + "撤回了什么！" + "\n" \
-                       +  old_msg.get('msg_content')
+                       + "撤回了什么!" + "\n" \
+                       + old_msg.get('msg_content')
             # 如果是分享存在链接
             if old_msg['msg_type'] == "Sharing": msg_body += "\n就是这个链接➣ " + old_msg.get('msg_share_url')
 
@@ -236,7 +236,7 @@ def callback(self):
 if not os.path.exists(rev_tmp_dir): os.mkdir(rev_tmp_dir)
 
 if __name__ == '__main__':
-    itchat.auto_login(hotReload=True,loginCallback=callback,statusStorageDir='user1.pkl')
+    itchat.auto_login(hotReload=True,loginCallback=callback,statusStorageDir='user2.pkl')
     # itchat.auto_login(hotReload=True,enableCmdQR=2)
     itchat.run()
 
