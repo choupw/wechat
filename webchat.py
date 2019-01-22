@@ -206,7 +206,7 @@ def saveRecallFile(fileName):
 
 def write_chat_msg(filename,text_msg):
     # 写数据
-    file_object = open(filename, 'a+')
+    file_object = open(filename, 'a+',encoding="utf8")
     file_object.writelines("\n"+text_msg)
     file_object.close()
 
